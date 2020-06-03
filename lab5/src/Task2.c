@@ -12,10 +12,7 @@ struct for_fac_struc {
     int *result;
 };
 
-//void do_fac(int *);
-//void do_wrap_up(int);
-int factmod (int n, int p);
-void result_fac(struct for_fac_struc *struc);
+void factorial(struct for_fac_struc *struc);
 void start_thread(int beg, int end, int mod, int *result, int j);
 
 pthread_mutex_t mut = PTHREAD_MUTEX_INITIALIZER;
@@ -101,10 +98,7 @@ while (1) {
     }
 
     for (j = 0; j < pnum; j++) {
-        if (pthread_join(threads[j], NULL) != 0) {
-            perror("pthread_join");
-            exit(1);
-        }
+        pthread_join(threads[j], NULL);
     }
 
   printf("result - %d\n", result);
@@ -120,15 +114,11 @@ void start_thread(int beg, int end, int mod, int *result, int j) {
 
         printf("%d - %d\n", struc[j].begin, struc[j].end);
 
-        if (pthread_create(&threads[j], NULL, (void *)result_fac,
-                    &struc[j]) != 0) {
-            perror("pthread_create");
-            exit(1);
-        }
+        pthread_create(&threads[j], NULL, (void *)factorial, &struc[j]);
 }
 
 
-void result_fac(struct for_fac_struc *struc) 
+void factorial(struct for_fac_struc *struc) 
 {
     
     int begin=struc->begin;
@@ -136,10 +126,8 @@ void result_fac(struct for_fac_struc *struc)
     int mod=struc->mod;
     int i;
     int res = 1;
-    //int buf;
 
     for (i = begin; i < end; i++) {
-        //buf = i % mod;
         res *= i;
         res %= mod;
     }
