@@ -48,7 +48,6 @@ void AB()
 {
         pthread_mutex_lock(&mutA);
         printf("AB loc A\n");
-        //sleep(1);
         pthread_mutex_lock(&mutB);
         printf("AB loc B\n");
 	pthread_mutex_unlock(&mutA);
@@ -58,7 +57,6 @@ void BA()
 {
 	pthread_mutex_lock(&mutB);
         printf("BA loc B\n");
-        //sleep(1);
         pthread_mutex_lock(&mutA);
         printf("BA loc A\n");
         pthread_mutex_unlock(&mutB);
