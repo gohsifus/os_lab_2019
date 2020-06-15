@@ -99,8 +99,7 @@ int main(int argc, char **argv) {
 
   struct sockaddr_in server = create_sockaddr(port, htonl(INADDR_ANY));
 
-  int opt_val = 1;
-  setsockopt(server_fd, SOL_SOCKET, SO_REUSEADDR, &opt_val, sizeof(opt_val));
+  
 
   int err = bind(server_fd, (struct sockaddr *)&server, sizeof(server));
   if (err < 0) {
@@ -169,7 +168,13 @@ int main(int argc, char **argv) {
       for (i = 0; i < 1; i++) {
         uint64_t result = 0;
         pthread_join(threads, (void **)&result);
+	printf("res:");
+	printf("%d", result);
+	printf("\n");
         total = MultModulo(total, result, mod);
+	printf("tot:");
+	printf("%d", total);
+	printf("\n");
       }
 
       printf("Total: %llu\n", total);
