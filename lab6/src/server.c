@@ -15,12 +15,7 @@
 #include "lib.h"
 
 
-//gcc server.c -lpthread -o server.out && ./server.out --port 20001 --tnum 4
-
-//./server.out --port 20001 --tnum 1
-
-
-uint64_t Factorial(const struct FactorialArgs *args) {
+uint64_t Factorial(struct FactorialArgs *args) {
     int fac = 1;
     // TODO: your code here
     int i;
@@ -33,10 +28,6 @@ uint64_t Factorial(const struct FactorialArgs *args) {
     return fac;
 }
 
-void *ThreadFactorial(void *args) {
-  struct FactorialArgs *fargs = (struct FactorialArgs *)args;
-  return (void *)(uint64_t *)Factorial(fargs);
-}
 
 int main(int argc, char **argv) {
   uint32_t i;
@@ -141,8 +132,6 @@ int main(int argc, char **argv) {
         break;
       }
 
-      pthread_t threads;
-
       uint64_t begin = 0;
       uint64_t end = 0;
       uint64_t mod = 0;
@@ -158,25 +147,13 @@ int main(int argc, char **argv) {
         args.end = end;
         args.mod = mod;
 
-        if (pthread_create(&threads, NULL, ThreadFactorial,
-                           (void *)&args)) {
-          printf("Error: pthread_create failed!\n");
-          return 1;
-        }
 
-      uint64_t total = 1;
-      for (i = 0; i < 1; i++) {
+        uint64_t total = 1;
+      
         uint64_t result = 0;
-        pthread_join(threads, (void **)&result);
-	printf("res:");
-	printf("%d", result);
-	printf("\n");
+	result = Factorial(&args);
         total = MultModulo(total, result, mod);
-	printf("tot:");
-	printf("%d", total);
-	printf("\n");
-      }
-
+      
       printf("Total: %llu\n", total);
         
       char buffer[256];
