@@ -159,7 +159,10 @@ int main(int argc, char **argv) {
                     exit(1);
                 }
 
-                struct sockaddr_in server = create_sockaddr(to[i].port, *((unsigned long *)hostname->h_addr));
+		struct sockaddr_in server;
+    		server.sin_family = AF_INET;
+    		server.sin_port = htons(to[i].port);
+    		server.sin_addr.s_addr = *((unsigned long *)hostname->h_addr);
                 
                 int sck = socket(AF_INET, SOCK_STREAM, 0);
                 if (sck < 0) {
